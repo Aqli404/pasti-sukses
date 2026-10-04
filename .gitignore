@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+pasti_sukses.db
+pasti_sukses.db-*
+*.log
+.env
