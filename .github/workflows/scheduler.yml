@@ -1,0 +1,32 @@
+name: Job Scheduler
+
+on:
+  schedule:
+    - cron: "0 * * * *" # tiap jam
+  workflow_dispatch: # bisa dijalankan manual
+
+jobs:
+  scrape-and-send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run one scrape + dispatch cycle
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: python -c "from scheduler import run_cycle; run_cycle('${BOT_TOKEN}')"
+
+      - name: Commit database (persist jobs across runs)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pasti_sukses.db
+          git diff --staged --quiet || git commit -m "chore: update job database [skip ci]"
+          git push
