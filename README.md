@@ -36,15 +36,96 @@ $env:BOT_TOKEN = "123456:ABC-DEF..."
 .\.venv\Scripts\python.exe scheduler.py
 ```
 
-## Deploy Gratis (GitHub Actions, Rp0)
+## Deploy ke VPS (panduan agen server) — Ubuntu/Debian
 
-1. Push repo ini ke GitHub (private recommended)
-2. Di repo: **Settings → Secrets and variables → Actions → New repository secret**
-   - Name: `BOT_TOKEN`, Value: token dari @BotFather
-3. Workflow `.github/workflows/scheduler.yml` otomatis jalan tiap jam
-4. Untuk bot polling 24/7: jalankan `bot.py` di PC/Raspberry Pi, atau deploy ke Railway/Render free tier
+Semua perintah dijalankan sebagai root (atau pakai `sudo`). Bot akan jalan 24/7 via systemd dengan auto-restart.
 
-> Catatan: GitHub Actions cron biasanya telat 3–10 menit — tidak masalah untuk job alert.
+### 1. Clone & setup environment
+
+```bash
+cd /opt
+git clone git@github.com:Aqli404/pasti-sukses.git
+cd pasti-sukses
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+```
+
+> Jika clone via SSH: generate deploy key dulu (`ssh-keygen -t ed25519 -N "" -f ~/.ssh/github_deploy`) lalu daftarkan `~/.ssh/github_deploy.pub` ke repo → Settings → Deploy keys (read-only cukup). Alternatif: clone via HTTPS + token.
+
+### 2. Simpan token bot
+
+Buat file env (ganti dengan token dari @BotFather):
+
+```bash
+cat > /etc/pasti-sukses.env << 'EOF'
+BOT_TOKEN=123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
+EOF
+chmod 600 /etc/pasti-sukses.env
+```
+
+### 3. Buat 2 systemd service
+
+```bash
+cat > /etc/systemd/system/pasti-sukses-bot.service << 'EOF'
+[Unit]
+Description=Pasti Sukses Telegram Bot (polling)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/pasti-sukses.env
+WorkingDirectory=/opt/pasti-sukses
+ExecStart=/opt/pasti-sukses/.venv/bin/python bot.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+cat > /etc/systemd/system/pasti-sukses-scheduler.service << 'EOF'
+[Unit]
+Description=Pasti Sukses Job Scheduler (scrape + dispatch per jam)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/pasti-sukses.env
+WorkingDirectory=/opt/pasti-sukses
+ExecStart=/opt/pasti-sukses/.venv/bin/python scheduler.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+
+### 4. Aktifkan & jalankan
+
+```bash
+systemctl daemon-reload
+systemctl enable --now pasti-sukses-bot pasti-sukses-scheduler
+systemctl status pasti-sukses-bot pasti-sukses-scheduler --no-pager
+```
+
+### 5. Pantau log
+
+```bash
+journalctl -u pasti-sukses-bot -f        # log bot
+journalctl -u pasti-sukses-scheduler -f  # log scraper
+```
+
+### 6. Update kode di kemudian hari
+
+```bash
+cd /opt/pasti-sukses && git pull
+systemctl restart pasti-sukses-bot pasti-sukses-scheduler
+```
+
+> Database SQLite tersimpan di `/opt/pasti-sukses/pasti_sukses.db`. Backup rutin: `cp pasti_sukses.db /root/backup/$(date +%F).db`
 
 ## Struktur
 
@@ -61,7 +142,7 @@ pasti-sukses/
 │   ├── wwr.py      # RSS
 │   ├── kalibrr.py  # HTML
 │   └── glints.py   # GraphQL → HTML fallback
-└── .github/workflows/scheduler.yml  # cron tiap jam
+└── requirements.txt
 ```
 
 ## Etika & Legal
