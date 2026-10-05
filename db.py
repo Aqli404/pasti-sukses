@@ -49,6 +49,12 @@ def init_db() -> None:
             sent_at     INTEGER NOT NULL,
             PRIMARY KEY (user_id, job_id)
         );
+        CREATE TABLE IF NOT EXISTS saved_jobs (
+            user_id     INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+            job_id      INTEGER NOT NULL REFERENCES jobs(id) ON DELETE CASCADE,
+            saved_at    INTEGER NOT NULL,
+            PRIMARY KEY (user_id, job_id)
+        );
         CREATE INDEX IF NOT EXISTS idx_jobs_category ON jobs(category);
         CREATE INDEX IF NOT EXISTS idx_jobs_created ON jobs(created_at);
         """
@@ -170,3 +176,51 @@ def job_stats() -> dict:
     users = conn.execute("SELECT COUNT(*) AS n FROM users").fetchone()["n"]
     conn.close()
     return {"jobs": jobs, "users": users}
+
+
+def save_job(user_id: int, job_id: int) -> bool:
+    """Bookmark a job for a user. Returns True if newly saved."""
+    conn = get_conn()
+    try:
+        conn.execute(
+            "INSERT OR IGNORE INTO saved_jobs (user_id, job_id, saved_at) VALUES (?, ?, ?)",
+            (user_id, job_id, int(time.time())),
+        )
+        conn.commit()
+        return True
+    finally:
+        conn.close()
+
+
+def unsave_job(user_id: int, job_id: int) -> bool:
+    """Remove a bookmark. Returns True if a row was deleted."""
+    conn = get_conn()
+    cur = conn.execute(
+        "DELETE FROM saved_jobs WHERE user_id = ? AND job_id = ?",
+        (user_id, job_id),
+    )
+    conn.commit()
+    conn.close()
+    return cur.rowcount > 0
+
+
+def get_saved_jobs(user_id: int, limit: int = 30) -> list[dict]:
+    conn = get_conn()
+    rows = conn.execute(
+        "SELECT j.*, s.saved_at FROM saved_jobs s "
+        "JOIN jobs j ON j.id = s.job_id "
+        "WHERE s.user_id = ? ORDER BY s.saved_at DESC LIMIT ?",
+        (user_id, limit),
+    ).fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+def is_saved(user_id: int, job_id: int) -> bool:
+    conn = get_conn()
+    row = conn.execute(
+        "SELECT 1 FROM saved_jobs WHERE user_id = ? AND job_id = ?",
+        (user_id, job_id),
+    ).fetchone()
+    conn.close()
+    return row is not None

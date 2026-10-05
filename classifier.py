@@ -22,6 +22,18 @@ FIELD_KEYWORDS = {
         "finance", "accounting", "accountant", "tax", "audit", "bookkeeping",
         "financial", "treasury", "payable", "receivable",
     ],
+    "agro": [
+        "pertanian", "perkebunan", "agronomi", "agribisnis", "pangan", "food",
+        "food technology", "quality control", "qc", "qa", "haccp", "gmp",
+        "formulator", "agroteknologi", "pascapanen", "agriculture", "farm",
+        "peternakan", "perikanan", "hortikultura",
+    ],
+    "operations": [
+        "supply chain", "logistik", "logistics", "warehouse", "gudang",
+        "purchasing", "procurement", "inventory", "admin operasional",
+        "export import", "ekspor impor", "operasional", "operations",
+        "distribusi", "fleet", "driver",
+    ],
 }
 
 
@@ -56,12 +68,23 @@ if __name__ == "__main__":
         ("UI/UX Designer", "Tokopedia", False, "design"),
         ("Social Media Specialist", "", False, "marketing"),
         ("Staff Accounting", "", False, "finance"),
-        ("Warehouse Staff", "", False, "other"),
         ("Frontend Developer", "", True, "it"),
+        ("Agronomi Palawija", "PT Agribisnis Nusantara", False, "agro"),
+        ("Quality Control Food Technology", "", False, "agro"),
+        ("Staff QC Pangan", "", False, "agro"),
+        ("Haccp Officer", "", False, "agro"),
+        ("Supply Chain Supervisor", "", False, "operations"),
+        ("Admin Gudang Warehouse", "", False, "operations"),
+        ("Staff Purchasing Procurement", "", False, "operations"),
+        ("Export Import Staff", "", False, "operations"),
+        ("Sales Canvassing EDC", "", False, "marketing"),
+        ("Community Officer", "", False, "marketing"),
+        ("Guru Honor Sukamara", "", False, "other"),
+        ("Kasir Toko", "", False, "other"),
     ]
     for title, company, remote, expected in tests:
         got = classify(title, company)
         assert got == expected, f"classify({title!r}) = {got}, want {expected}"
     assert classify_location("Remote - Worldwide", True) == "remote"
     assert classify_location("Jakarta Selatan", False) == "jakarta"
-    print("classifier self-check OK")
+    print("classifier self-check OK: " + str(len(tests)) + " cases passed")
