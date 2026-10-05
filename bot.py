@@ -1,4 +1,5 @@
 """Telegram bot: Pasti Sukses - job alert with per-user preferences."""
+import html
 import logging
 
 import requests
@@ -86,12 +87,18 @@ def done_kb() -> InlineKeyboardMarkup:
 
 def job_text(job: dict) -> str:
     icon = "🏠" if job["is_remote"] else "🏢"
+    title = html.escape(str(job.get('title') or '-'))
+    company = html.escape(str(job.get('company') or '-'))
+    loc = html.escape(str(job.get('location') or '-'))
+    cat = html.escape(str(FIELD_LABELS.get(job.get('category'), '📦 Lainnya')))
+    src = html.escape(str(job.get('source') or '-'))
+    url = job.get('url') or '#'
     return (
-        f"{icon} *{job['title']}*\n"
-        f"👔 {job['company'] or '-'}\n"
-        f"📍 {job['location'] or '-'}\n"
-        f"🏷 {FIELD_LABELS.get(job['category'], '📦 Lainnya')} | sumber: {job['source']}\n"
-        f"🔗 {job['url']}"
+        f"{icon} <b>{title}</b>\n"
+        f"👔 {company}\n"
+        f"📍 {loc}\n"
+        f"🏷 {cat} | sumber: {src}\n"
+        f"🔗 {url}"
     )
 
 
@@ -99,7 +106,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
     db.upsert_user(user.id, user.username)
     _onboarding[user.id] = {}
-    await update.message.reply_text(WELCOME, parse_mode="Markdown", reply_markup=field_kb())
+    await update.message.reply_text(WELCOME, parse_mode="HTML", reply_markup=field_kb())
 
 
 async def preferences_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -113,7 +120,7 @@ async def preferences_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         f"• Bidang: {FIELD_LABELS.get(prefs['field'], prefs['field'])}\n"
         f"• Lokasi: {LOC_LABELS.get(prefs['location'], prefs['location'])}\n"
         f"• Tipe: {mode}\n\nTekan tombol untuk mengubah 👇",
-        parse_mode="Markdown",
+        parse_mode="HTML",
         reply_markup=field_kb(),
     )
 
@@ -126,7 +133,7 @@ async def latest_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         await update.message.reply_text("Belum ada lowongan tersimpan. Coba lagi nanti ya 🙏")
         return
     for j in jobs[:10]:
-        await update.message.reply_text(job_text(j), parse_mode="Markdown", disable_web_page_preview=True)
+        await update.message.reply_text(job_text(j), parse_mode="HTML", disable_web_page_preview=True)
 
 
 async def help_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -135,7 +142,7 @@ async def help_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "/start - pilih preferensi\n"
         "/preferences - lihat & ubah preferensi\n"
         "/latest - 10 lowongan terbaru sesuai bidangmu",
-        parse_mode="Markdown",
+        parse_mode="HTML",
     )
 
 
@@ -170,9 +177,9 @@ async def on_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if not jobs:
             await q.edit_message_text("Belum ada lowongan tersimpan. Coba lagi nanti ya 🙏")
             return
-        await q.edit_message_text(f"🆕 *{len(jobs[:10])} lowongan terbaru untukmu:*", parse_mode="Markdown")
+        await q.edit_message_text(f"🆕 <b>{len(jobs[:10])} lowongan terbaru untukmu:</b>", parse_mode="HTML")
         for j in jobs[:10]:
-            await context.bot.send_message(user_id, job_text(j), parse_mode="Markdown", disable_web_page_preview=True)
+            await context.bot.send_message(user_id, job_text(j), parse_mode="HTML", disable_web_page_preview=True)
 
 
 async def _finish_onboarding(q, user_id: int) -> None:
@@ -192,7 +199,7 @@ async def _finish_onboarding(q, user_id: int) -> None:
         f"• Tipe: {mode}\n\n"
         "Lowongan baru yang cocok akan saya kirim otomatis ke sini 🚀\n"
         "Ketik /latest untuk lihat yang sudah tersedia.",
-        parse_mode="Markdown",
+        parse_mode="HTML",
         reply_markup=done_kb(),
     )
 
