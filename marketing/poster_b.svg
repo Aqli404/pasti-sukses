@@ -24,10 +24,9 @@
 
   <rect width="1080" height="1920" fill="url(#bg)"/>
   <rect width="1080" height="1920" fill="url(#grid)"/>
-  <circle cx="950" cy="260" r="430" fill="url(#glowTop)"/>
-  <circle cx="130" cy="1680" r="470" fill="url(#glowBot)"/>
+  <circle cx="950" cy="240" r="430" fill="url(#glowTop)"/>
+  <circle cx="130" cy="1700" r="470" fill="url(#glowBot)"/>
 
-  <!-- phone chat mockup -->
   <g font-family="Segoe UI, Arial, sans-serif">
     <!-- headline -->
     <text x="540" y="330" text-anchor="middle" font-size="88" font-weight="800" fill="#FFFFFF">KIRIMAN KERJA</text>
@@ -36,22 +35,25 @@
 
     <!-- chat bubble mock -->
     <rect x="150" y="640" width="780" height="560" rx="40" fill="#0F2B52" fill-opacity="0.9" stroke="#38BDF8" stroke-opacity="0.35" stroke-width="2"/>
+
+    <!-- chips: text vertically centred (baselines at y0+42 / y0+76) -->
     <rect x="230" y="700" width="620" height="96" rx="24" fill="#1B3E6F"/>
-    <text x="262" y="748" font-size="34" font-weight="700" fill="#7DD3FC">🏠 Senior Backend Engineer</text>
-    <text x="262" y="784" font-size="26" fill="#CBD5E1">Lemon.io · Worldwide · 5 sumber ✨</text>
+    <text x="262" y="742" font-size="34" font-weight="700" fill="#7DD3FC">🏠 Senior Backend Engineer</text>
+    <text x="262" y="776" font-size="26" fill="#CBD5E1">Lemon.io · Worldwide · 6 sumber ✨</text>
 
     <rect x="230" y="820" width="620" height="96" rx="24" fill="#1B3E6F"/>
-    <text x="262" y="868" font-size="34" font-weight="700" fill="#7DD3FC">🎨 UI/UX Designer</text>
-    <text x="262" y="904" font-size="26" fill="#CBD5E1">Startup ID · Jakarta · baru masuk 🔥</text>
+    <text x="262" y="862" font-size="34" font-weight="700" fill="#7DD3FC">🎨 UI/UX Designer</text>
+    <text x="262" y="896" font-size="26" fill="#CBD5E1">Startup ID · Jakarta · baru masuk 🔥</text>
 
     <rect x="230" y="940" width="620" height="96" rx="24" fill="#1B3E6F"/>
-    <text x="262" y="988" font-size="34" font-weight="700" fill="#7DD3FC">📢 Digital Marketing</text>
-    <text x="262" y="1024" font-size="26" fill="#CBD5E1">E-commerce · Remote · sesuai profilmu</text>
+    <text x="262" y="982" font-size="34" font-weight="700" fill="#7DD3FC">📢 Digital Marketing</text>
+    <text x="262" y="1016" font-size="26" fill="#CBD5E1">E-commerce · Remote · sesuai profilmu</text>
 
-    <text x="540" y="1130" text-anchor="middle" font-size="30" fill="#93C5FD">…dan ratusan lainnya, otomatis terfilter ⚡</text>
+    <text x="540" y="1140" text-anchor="middle" font-size="28" fill="#93C5FD">…dan ratusan lainnya, otomatis terfilter ⚡</text>
 
-    <!-- features -->
-    <text x="540" y="1290" text-anchor="middle" font-size="42" font-weight="700" fill="#FFFFFF">GRATIS · Tanpa daftar ribet · Link langsung lamar 💼</text>
+    <!-- features: split into two centred lines that stay well inside the canvas -->
+    <text x="540" y="1280" text-anchor="middle" font-size="40" font-weight="700" fill="#FFFFFF">GRATIS · Tanpa daftar ribet</text>
+    <text x="540" y="1345" text-anchor="middle" font-size="40" font-weight="700" fill="#7DD3FC">Link langsung lamar 💼</text>
 
     <!-- CTA -->
     <rect x="190" y="1420" width="700" height="120" rx="60" fill="url(#cta)"/>
