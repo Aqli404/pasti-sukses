@@ -166,6 +166,29 @@ def _find(texts: list[Text], needle: str) -> Text | None:
     return None
 
 
+# TikTok photo posts overlay UI on top of the image, so text must stay inside a
+# safe zone: right rail (like/share/comment) covers x>=900, the top bar covers
+# y<200, and caption/username/music covers y>1600.
+TIKTOK_SAFE = {"x0": 70, "x1": 880, "y0": 230, "y1": 1560}
+
+
+def check_tiktok_safezone(path: str) -> list[str]:
+    problems = []
+    for t in parse_texts(open(path, encoding="utf-8").read()):
+        label = re.sub(r"<[^>]+>", "", t.content).strip()[:40]
+        if t.left < TIKTOK_SAFE["x0"] or t.right > TIKTOK_SAFE["x1"]:
+            problems.append(
+                f"  [tiktok safe-X] [{label}] L={t.left:.0f} R={t.right:.0f} "
+                f"(must be {TIKTOK_SAFE['x0']}..{TIKTOK_SAFE['x1']})"
+            )
+        if t.y < TIKTOK_SAFE["y0"] or t.y > TIKTOK_SAFE["y1"]:
+            problems.append(
+                f"  [tiktok safe-Y] [{label}] baseline={t.y:.0f} "
+                f"(must be {TIKTOK_SAFE['y0']}..{TIKTOK_SAFE['y1']})"
+            )
+    return problems
+
+
 def check_containers(path: str) -> list[str]:
     """Verify specific texts stay inside their pill / chip / card containers
     with a comfortable margin. Coordinates mirror the SVG sources."""
@@ -222,6 +245,44 @@ def check_containers(path: str) -> list[str]:
         if t and (t.left < 40 or t.right > 1040):
             problems.append(f"  [url] L={t.left:.0f} R={t.right:.0f} outside canvas margin")
 
+    if name.startswith("tt_"):
+        # badge pill on tt_01: rect x=280 w=520 (280..800)
+        t = _find(texts, "BUILD WITH AI")
+        if t and (t.left < 305 or t.right > 775):
+            problems.append(f"  [tt pill] BUILD WITH AI L={t.left:.0f} R={t.right:.0f} outside 280..800")
+        # overview card on tt_01: rect x=195 w=690 (195..885), text starts x=260
+        for needle in ("Isi carousel", "Kenapa gue", "Gimana AI", "Kode lengkap"):
+            t = _find(texts, needle)
+            if t and t.right > 855:
+                problems.append(f"  [tt card] '{needle}' R={t.right:.0f} > 855")
+        # feature card on tt_02: rect x=150 w=730 (150..880)
+        for needle in ("Lowongan baru", "Sesuai", "Langsung ke", "gratis · tanpa"):
+            t = _find(texts, needle)
+            if t and t.right > 850:
+                problems.append(f"  [tt card] '{needle}' R={t.right:.0f} > 850")
+        # chips on tt_03: each rect w=210
+        for needle, x0, x1 in (
+            ("Python 3.11", 200, 410), ("Telegram Bot", 435, 645), ("SQLite", 670, 880),
+            ("6 Scrapers", 317, 527), ("Scheduler", 552, 762),
+        ):
+            t = _find(texts, needle)
+            if t and (t.left < x0 + 8 or t.right > x1 - 8):
+                problems.append(f"  [tt chip] '{needle}' L={t.left:.0f} R={t.right:.0f} outside {x0}..{x1}")
+        # stat strip on tt_03: rect x=200 w=680
+        for needle in ("183", "24/7"):
+            t = _find(texts, needle)
+            if t and (t.left < 210 or t.right > 870):
+                problems.append(f"  [tt stat] '{needle}' outside 200..880")
+        # QR card on tt_04: rect x=340 w=400 (340..740)
+        t = _find(texts, "Scan → buka repository")
+        if t and (t.left < 355 or t.right > 725):
+            problems.append(f"  [tt QR] label L={t.left:.0f} R={t.right:.0f} outside 340..740")
+        # CTA pills on tt_04: rect x=195 w=690 (195..885)
+        for needle in ("Star", "FOLLOW @rosif.ai"):
+            t = _find(texts, needle)
+            if t and (t.left < 220 or t.right > 860):
+                problems.append(f"  [tt CTA] '{needle}' L={t.left:.0f} R={t.right:.0f} outside 195..885")
+
     return problems
 
 
@@ -229,10 +290,14 @@ def main() -> None:
     import glob
 
     any_problem = False
-    for path in sorted(glob.glob(os.path.join("marketing", "poster_*.svg"))):
+    targets = sorted(glob.glob(os.path.join("marketing", "poster_*.svg")))
+    targets += sorted(glob.glob(os.path.join("marketing", "tiktok", "tt_*.svg")))
+    for path in targets:
         problems = check(path) + check_containers(path)
+        if os.path.basename(path).startswith("tt_"):
+            problems += check_tiktok_safezone(path)
         status = "OK" if not problems else f"{len(problems)} PROBLEM(S)"
-        print(f"{os.path.basename(path):16} {status}")
+        print(f"{os.path.relpath(path, 'marketing'):24} {status}")
         for p in problems:
             print(p)
             any_problem = True

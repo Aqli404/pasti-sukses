@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0A1930"/>
+      <stop offset="0.55" stop-color="#0D2A52"/>
+      <stop offset="1" stop-color="#123C6E"/>
+    </linearGradient>
+    <linearGradient id="cta" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#38BDF8"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#38BDF8" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#38BDF8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#2563EB" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#2563EB" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="72" height="72" patternUnits="userSpaceOnUse">
+      <path d="M 72 0 L 0 0 0 72" fill="none" stroke="#38BDF8" stroke-opacity="0.07" stroke-width="1.5"/>
+    </pattern>
+</defs>
+  <rect width="1080" height="1920" fill="url(#bg)"/>
+  <rect width="1080" height="1920" fill="url(#grid)"/>
+  <circle cx="930" cy="300" r="430" fill="url(#glow1)"/>
+  <circle cx="150" cy="1650" r="470" fill="url(#glow2)"/>
+  <g stroke="#38BDF8" stroke-opacity="0.20" stroke-width="2" fill="none">
+    <path d="M -40 170 L 150 110 L 360 175"/>
+  </g>
+  <g fill="#38BDF8">
+    <circle cx="150" cy="110" r="6" fill-opacity="0.7"/>
+  </g>
+  <g font-family="Segoe UI, Arial, sans-serif" text-anchor="middle">
+
+    <text x="830" y="242" font-size="26" font-weight="600" fill="#7DD3FC" fill-opacity="0.9">4/4</text>
+    <text x="540" y="430" font-size="80" font-weight="800" fill="#FFFFFF">OPEN SOURCE</text>
+    <rect x="440" y="478" width="200" height="8" rx="4" fill="#38BDF8"/>
+    <text x="540" y="575" font-size="42" font-weight="600" fill="#BAE6FD">baca, fork, pelajari — bebas</text>
+
+    <rect x="340" y="640" width="400" height="430" rx="32" fill="#FFFFFF"/>
+    <image x="375" y="680" width="330" height="330" xlink:href="data:image/png;base64,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"/>
+    <text x="540" y="1050" font-size="26" font-weight="600" fill="#0C2344">Scan → buka repository</text>
+
+    <text x="540" y="1145" font-size="34" font-weight="700" fill="#E0F2FE">github.com/Aqli404/pasti-sukses</text>
+
+    <rect x="195" y="1215" width="690" height="100" rx="50" fill="url(#cta)"/>
+    <text x="540" y="1279" font-size="40" font-weight="800" fill="#FFFFFF">⭐ Star &amp; fork kalau bermanfaat</text>
+
+    <rect x="195" y="1360" width="690" height="100" rx="50" fill="#38BDF8" fill-opacity="0.14" stroke="#38BDF8" stroke-opacity="0.55" stroke-width="2"/>
+    <text x="540" y="1424" font-size="40" font-weight="800" fill="#7DD3FC">FOLLOW @rosif.ai ✨</text>
+
+    <text x="540" y="1545" font-size="30" fill="#93C5FD">project AI berikutnya menyusul</text>
+  </g>
+</svg>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0A1930"/>
+      <stop offset="0.55" stop-color="#0D2A52"/>
+      <stop offset="1" stop-color="#123C6E"/>
+    </linearGradient>
+    <linearGradient id="cta" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#38BDF8"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#38BDF8" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#38BDF8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#2563EB" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#2563EB" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="72" height="72" patternUnits="userSpaceOnUse">
+      <path d="M 72 0 L 0 0 0 72" fill="none" stroke="#38BDF8" stroke-opacity="0.07" stroke-width="1.5"/>
+    </pattern>
+</defs>
+  <rect width="1080" height="1920" fill="url(#bg)"/>
+  <rect width="1080" height="1920" fill="url(#grid)"/>
+  <circle cx="120" cy="300" r="430" fill="url(#glow1)"/>
+  <circle cx="960" cy="1700" r="470" fill="url(#glow2)"/>
+  <g stroke="#38BDF8" stroke-opacity="0.20" stroke-width="2" fill="none">
+    <path d="M -40 170 L 150 110 L 360 175"/>
+  </g>
+  <g fill="#38BDF8">
+    <circle cx="150" cy="110" r="6" fill-opacity="0.7"/>
+  </g>
+  <g font-family="Segoe UI, Arial, sans-serif" text-anchor="middle">
+
+    <text x="830" y="242" font-size="26" font-weight="600" fill="#7DD3FC" fill-opacity="0.9">1/4</text>
+    <rect x="280" y="262" width="520" height="66" rx="33" fill="#38BDF8" fill-opacity="0.14" stroke="#38BDF8" stroke-opacity="0.55" stroke-width="2"/>
+    <text x="540" y="306" font-size="30" font-weight="600" fill="#7DD3FC" letter-spacing="1">BUILD WITH AI · @rosif.ai</text>
+
+    <text x="540" y="530" font-size="70" font-weight="800" fill="#FFFFFF">PROJECT PERTAMA</text>
+    <text x="540" y="630" font-size="70" font-weight="800" fill="#FFFFFF">GUE DI GITHUB 🚀</text>
+    <rect x="440" y="678" width="200" height="8" rx="4" fill="#38BDF8"/>
+
+    <text x="540" y="800" font-size="46" font-weight="600" fill="#BAE6FD">dibangun 100% bareng AI</text>
+    <text x="540" y="870" font-size="36" fill="#93C5FD">open source di GitHub 🐙</text>
+
+    <rect x="195" y="970" width="690" height="430" rx="36" fill="#0F2B52" fill-opacity="0.9" stroke="#38BDF8" stroke-opacity="0.35" stroke-width="2"/>
+    <text x="260" y="1065" font-size="40" font-weight="700" fill="#FFFFFF" text-anchor="start">Isi carousel ini 👇</text>
+    <text x="260" y="1155" font-size="36" fill="#BAE6FD" text-anchor="start">1. Kenapa gue bikin bot kerja</text>
+    <text x="260" y="1235" font-size="36" fill="#BAE6FD" text-anchor="start">2. Gimana AI bantu codingnya</text>
+    <text x="260" y="1315" font-size="36" fill="#BAE6FD" text-anchor="start">3. Kode lengkap — gratis, buka</text>
+
+    <text x="540" y="1500" font-size="38" font-weight="700" fill="#7DD3FC">Swipe →</text>
+  </g>
+</svg>
