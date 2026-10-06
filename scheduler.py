@@ -6,12 +6,12 @@ import time
 import db
 from bot import send_job_message
 from classifier import classify, classify_location
-from scraper import glints, kalibrr, remoteok, remotive, wwr
+from scraper import glints, kalibrr, linkedin, remoteok, remotive, wwr
 
 logging.basicConfig(format="%(asctime)s %(levelname)s: %(message)s", level=logging.INFO)
 log = logging.getLogger("scheduler")
 
-SOURCES = [remoteok.scrape, remotive.scrape, wwr.scrape, kalibrr.scrape, glints.scrape]
+SOURCES = [remoteok.scrape, remotive.scrape, wwr.scrape, kalibrr.scrape, glints.scrape, linkedin.scrape]
 
 
 def run_cycle(token: str | None = None) -> dict:
