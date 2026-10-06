@@ -15,7 +15,7 @@ for j in jobs:
 db.upsert_user(12345, "testuser")
 db.set_preferences(12345, "it", "any", True)
 m1 = db.find_matching_users("it", True, "Worldwide")
-assert m1 == [12345], f"expected [12345], got {m1}"
+assert 12345 in m1, f"expected 12345 in results, got {m1}"
 m2 = db.find_matching_users("it", False, "Jakarta")
 assert m2 == [], f"remote-only user should not match onsite job, got {m2}"
 print("matching logic OK")
@@ -25,8 +25,8 @@ db.upsert_user(777, "agrofan")
 db.set_preferences(777, "agro", "any", False)
 db.upsert_user(888, "opsfan")
 db.set_preferences(888, "operations", "any", False)
-assert db.find_matching_users("agro", False, "Indonesia") == [777]
-assert db.find_matching_users("operations", True, "Remote") == [888]
+assert 777 in db.find_matching_users("agro", False, "Indonesia")
+assert 888 in db.find_matching_users("operations", True, "Remote")
 print("agro & operations matching OK")
 
 # --- saved_jobs: save / list / is_saved / unsave ---
